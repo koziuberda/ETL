@@ -35,7 +35,7 @@ public class TripRepository : ITripRepository
         await bulkCopy.WriteToServerAsync(dataTable);
     }
     
-    private DataTable MapToDataTable(IEnumerable<Trip> trips)
+    private static DataTable MapToDataTable(IEnumerable<Trip> trips)
     {
         var dataTable = new DataTable();
         

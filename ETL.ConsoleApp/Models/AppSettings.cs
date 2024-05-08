@@ -6,5 +6,9 @@ public class AppSettings
 
     public string DestinationTable { get; set; } = string.Empty;
 
-    public string CsvFilePath { get; set; } = string.Empty;
+    public string InputCsvFilePath { get; set; } = string.Empty;
+
+    public string DuplicatesCsvFilePath { get; set; } = string.Empty;
+
+    public bool DropNullOrEmpty { get; set; }
 }
