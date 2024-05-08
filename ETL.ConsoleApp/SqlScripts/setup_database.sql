@@ -39,5 +39,27 @@ CREATE TABLE Trips (
     FareAmount DECIMAL(10,2),
     TipAmount DECIMAL(10,2)
 );
+
+-- Add a persisted computed column for the time spent traveling
+ALTER TABLE Trips
+    ADD TimeSpentTraveling AS DATEDIFF(MINUTE, PickupDateTime, DropoffDateTime) PERSISTED;
+
 PRINT 'New table created successfully.';
+GO
+
+-- Index creation
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = 'idx_PULocationID_TipAmount' AND object_id = OBJECT_ID('Trips'))
+BEGIN
+    CREATE INDEX idx_PULocationID_TipAmount ON Trips (PULocationID, TipAmount);
+END
+
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = 'idx_TripDistance' AND object_id = OBJECT_ID('Trips'))
+BEGIN
+    CREATE INDEX idx_TripDistance ON Trips (TripDistance);
+END
+
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = 'idx_TravelTime' AND object_id = OBJECT_ID('Trips'))
+BEGIN
+CREATE INDEX idx_TravelTime ON Trips (TimeSpentTraveling);
+END
 GO
