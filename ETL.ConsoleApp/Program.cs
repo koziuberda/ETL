@@ -1,4 +1,6 @@
 ﻿using ETL.ConsoleApp.Models;
+using ETL.ConsoleApp.Repositories;
+using ETL.ConsoleApp.Repositories.Contracts;
 using ETL.ConsoleApp.Services;
 using ETL.ConsoleApp.Services.Contracts;
 using Microsoft.Extensions.Configuration;
@@ -9,7 +11,7 @@ namespace ETL.ConsoleApp;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         // create service collection
         var serviceCollection = new ServiceCollection();
@@ -19,7 +21,8 @@ public class Program
         var serviceProvider = serviceCollection.BuildServiceProvider();
 
         // run app
-        serviceProvider.GetService<App>().Run();
+        var app = serviceProvider.GetService<App>();
+        await app.Run();
     }
     
     private static void ConfigureServices(IServiceCollection serviceCollection)
@@ -41,6 +44,7 @@ public class Program
 
         // add services
         serviceCollection.AddTransient<IDataService, DataService>();
+        serviceCollection.AddScoped<ITripRepository, TripRepository>();
 
         // add app
         serviceCollection.AddTransient<App>();

@@ -2,5 +2,5 @@
 
 public interface IDataService
 {
-    void Run();
+    Task Run();
 }
