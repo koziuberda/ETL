@@ -1,6 +1,6 @@
 ﻿namespace ETL.ConsoleApp.Services.Contracts;
 
-public interface IDataService
+public interface IEtlService
 {
     Task Run();
 }

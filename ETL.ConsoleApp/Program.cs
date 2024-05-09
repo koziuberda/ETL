@@ -43,8 +43,9 @@ public class Program
         serviceCollection.Configure<AppSettings>(configuration.GetSection("Configuration"));
 
         // add services
-        serviceCollection.AddTransient<IDataService, DataService>();
+        serviceCollection.AddTransient<IEtlService, EtlService>();
         serviceCollection.AddScoped<ITripRepository, TripRepository>();
+        serviceCollection.AddScoped<IDatabaseService, DatabaseService>();
 
         // add app
         serviceCollection.AddTransient<App>();

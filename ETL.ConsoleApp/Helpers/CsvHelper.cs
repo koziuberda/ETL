@@ -3,7 +3,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using ETL.ConsoleApp.Models;
 
-namespace ETL.ConsoleApp.Services;
+namespace ETL.ConsoleApp.Helpers;
 
 public static class CsvHelper
 {

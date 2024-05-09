@@ -5,21 +5,21 @@ namespace ETL.ConsoleApp;
 
 public class App
 {
-    private readonly IDataService _dataService;
+    private readonly IEtlService _etlService;
     private readonly ILogger<App> _logger;
 
     public App(
-        IDataService dataService, 
+        IEtlService etlService, 
         ILogger<App> logger)
     {
-        _dataService = dataService;
+        _etlService = etlService;
         _logger = logger;
     }
     
     public async Task Run()
     {
         _logger.LogInformation($"Starting console application...");
-        await _dataService.Run();
+        await _etlService.Run();
         _logger.LogInformation("Press any key to exit the application.");
         Console.ReadKey();
     }

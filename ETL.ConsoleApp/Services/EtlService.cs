@@ -6,42 +6,46 @@ using Microsoft.Extensions.Options;
 
 namespace ETL.ConsoleApp.Services;
 
-public class DataService : IDataService
+public class EtlService : IEtlService
 {
-    private readonly ILogger<DataService> _logger;
+    private readonly ILogger<EtlService> _logger;
     private readonly AppSettings _config;
-    private readonly ITripRepository _tripRepository;
+    private readonly IDatabaseService _databaseService;
 
-    public DataService(
-        ILogger<DataService> logger,
+    public EtlService(
+        ILogger<EtlService> logger,
         IOptions<AppSettings> config, 
-        ITripRepository tripRepository)
+        IDatabaseService databaseService)
     {
         _logger = logger;
-        _tripRepository = tripRepository;
+        _databaseService = databaseService;
         _config = config.Value;
     }
 
     public async Task Run()
     {
-        _logger.LogInformation($"DataService is running");
+        _logger.LogInformation($"EtlService is running");
 
-        var allRecords = CsvHelper.ReadTripsCsv(_config.InputCsvFilePath);
+        _databaseService.CreateDatabaseIfNotExist();
+        _databaseService.CreateTablesAndIndexesIfNotExist();
+        _logger.LogInformation("Database is set up");
+        
+        var allRecords = Helpers.CsvHelper.ReadTripsCsv(_config.InputCsvFilePath);
         _logger.LogInformation("Read {recordsNum} records from CSV.", allRecords.Count);
 
         var processedRecords = ProcessRecords(allRecords);
         _logger.LogInformation("Records were processed.");
         
-        await _tripRepository.BulkInsert(processedRecords);
+        await _databaseService.InsertTrips(processedRecords);
         _logger.LogInformation("Inserted {processedRecordsNum} items into database.", processedRecords.Count);
         
-        _logger.LogInformation("Stopping DataService...");
+        _logger.LogInformation("Stopping EtlService...");
     }
 
     private List<Trip> ProcessRecords(IReadOnlyCollection<Trip> records)
     {
         var uniqueRecords = GetUniqueRecords(records, out var duplicates);
-        CsvHelper.WriteTripsToCsv(_config.DuplicatesCsvFilePath, duplicates);
+        Helpers.CsvHelper.WriteTripsToCsv(_config.DuplicatesCsvFilePath, duplicates);
         _logger.LogInformation("Unique records: {uniqueRecordsNum}; N. of records removed: {duplicatesNum}", 
             uniqueRecords.Count, duplicates.Count);
 
