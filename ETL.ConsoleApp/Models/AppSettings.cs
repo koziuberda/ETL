@@ -2,15 +2,7 @@
 
 public class AppSettings
 {
-    public string ConnectionString { get; set; } = string.Empty;
+    public DbSettings DbSettings { get; set; } = new ();
 
-    public string DestinationTable { get; set; } = string.Empty;
-    
-    public string PathToCreateTablesScript { get; set; } = string.Empty;
-
-    public string InputCsvFilePath { get; set; } = string.Empty;
-
-    public string DuplicatesCsvFilePath { get; set; } = string.Empty;
-
-    public bool DropNullOrEmpty { get; set; }
+    public CsvSettings CsvSettings { get; set; } = new ();
 }

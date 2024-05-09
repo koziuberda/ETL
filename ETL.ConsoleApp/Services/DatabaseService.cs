@@ -10,7 +10,7 @@ namespace ETL.ConsoleApp.Services;
 
 public class DatabaseService : IDatabaseService
 {
-    private readonly AppSettings _config;
+    private readonly DbSettings _config;
     private readonly ITripRepository _tripRepository;
     private readonly ILogger<DatabaseService> _logger;
     
@@ -20,7 +20,7 @@ public class DatabaseService : IDatabaseService
         ILogger<DatabaseService> logger)
     {
         _tripRepository = tripRepository;
-        _config = config.Value;
+        _config = config.Value.DbSettings;
         _logger = logger;
     }
 

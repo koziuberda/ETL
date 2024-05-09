@@ -22,7 +22,16 @@ public class Program
 
         // run app
         var app = serviceProvider.GetService<App>();
-        await app.Run();
+        
+        try
+        {
+            await app.Run();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred: {ex.Message}");
+            Environment.Exit(1);
+        }
     }
     
     private static void ConfigureServices(IServiceCollection serviceCollection)

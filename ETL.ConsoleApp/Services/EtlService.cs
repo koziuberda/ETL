@@ -1,5 +1,4 @@
 ﻿using ETL.ConsoleApp.Models;
-using ETL.ConsoleApp.Repositories.Contracts;
 using ETL.ConsoleApp.Services.Contracts;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -30,7 +29,7 @@ public class EtlService : IEtlService
         _databaseService.CreateTablesAndIndexesIfNotExist();
         _logger.LogInformation("Database is set up");
         
-        var allRecords = Helpers.CsvHelper.ReadTripsCsv(_config.InputCsvFilePath);
+        var allRecords = Helpers.CsvHelper.ReadTripsCsv(_config.CsvSettings.InputCsvFilePath);
         _logger.LogInformation("Read {recordsNum} records from CSV.", allRecords.Count);
 
         var processedRecords = ProcessRecords(allRecords);
@@ -45,14 +44,14 @@ public class EtlService : IEtlService
     private List<Trip> ProcessRecords(IReadOnlyCollection<Trip> records)
     {
         var uniqueRecords = GetUniqueRecords(records, out var duplicates);
-        Helpers.CsvHelper.WriteTripsToCsv(_config.DuplicatesCsvFilePath, duplicates);
+        Helpers.CsvHelper.WriteTripsToCsv(_config.CsvSettings.DuplicatesCsvFilePath, duplicates);
         _logger.LogInformation("Unique records: {uniqueRecordsNum}; N. of records removed: {duplicatesNum}", 
             uniqueRecords.Count, duplicates.Count);
 
         TrimTextFields(uniqueRecords);
         _logger.LogInformation("Trimmed text fields.");
 
-        if (_config.DropNullOrEmpty)
+        if (_config.DbSettings.DropNullOrEmpty)
         {
             uniqueRecords = uniqueRecords
                 .Where(x => !string.IsNullOrEmpty(x.StoreAndFwdFlag) && x.PassengerCount is not null)

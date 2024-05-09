@@ -8,11 +8,11 @@ namespace ETL.ConsoleApp.Repositories;
 
 public class TripRepository : ITripRepository
 {
-    private readonly AppSettings _config;
+    private readonly DbSettings _config;
     
     public TripRepository(IOptions<AppSettings> config)
     {
-        _config = config.Value;
+        _config = config.Value.DbSettings;
     }
 
     public async Task BulkInsert(IEnumerable<Trip> trips)

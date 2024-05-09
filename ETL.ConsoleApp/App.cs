@@ -19,7 +19,15 @@ public class App
     public async Task Run()
     {
         _logger.LogInformation($"Starting console application...");
-        await _etlService.Run();
+        try
+        {
+            await _etlService.Run();
+        }
+        catch (Exception e)
+        {
+            _logger.LogCritical(e.Message);
+            throw;
+        }
         _logger.LogInformation("Press any key to exit the application.");
         Console.ReadKey();
     }
