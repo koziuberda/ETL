@@ -15,7 +15,8 @@
 ## Comments
 1. **Querying efficiency**. 
 The database is optimized for queries as per requirements. Request implementations can be found in the file`ETL.ConsoleApp/SqlScripts/sample_queries.sql`
-In order to optimize the database, I used indexes and a computed persistent field.
+In order to optimize the database, I used indexes and a computed persistent field. 
+To check schema and indexes, please take a look at `ETL.ConsoleApp/SqlScripts/create_tables_and_indexes.sql`
 2. **Inserting efficiency and security**. 
 The `SqlBulkCopy` is used to achieve good speed of inserting huge amount of data into the table.
 It's a good option not only for efficiency, but also for security, since it's resistant to SQL injections.
