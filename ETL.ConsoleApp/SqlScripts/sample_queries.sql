@@ -12,10 +12,6 @@ ORDER BY TripDistance DESC;
 -- Query 3: Find the top 100 longest fares in terms of time spent traveling
 SELECT TOP 100 *
 FROM Trips
-ORDER BY (DropoffDateTime - PickupDateTime) DESC;
-
-SELECT TOP 100 *
-FROM Trips
 ORDER BY TimeSpentTraveling DESC;
 
 -- Query 4: Search where part of the conditions is PULocationId
